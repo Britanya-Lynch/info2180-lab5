@@ -1,29 +1,34 @@
 document.addEventListener('DOMContentLoaded', function () {
-   
-    const lookupButton = document.querySelector('#lookup');
+    const lookupCountryButton = document.querySelector('#lookupcountry');
     const countryInput = document.querySelector('#country');
     const resultDiv = document.querySelector('#result');
 
-  
-    lookupButton.onclick = function () {
-        const countryValue = countryInput.value.trim(); 
-        const xhr = new XMLHttpRequest(); 
+    function performLookup() {
+        const countryValue = countryInput.value.trim();
+        if (!countryValue) {
+            resultDiv.innerHTML = '<p>Please enter a country name.</p>';
+            return;
+        }
 
-       
+        const xhr = new XMLHttpRequest();
+
         xhr.onreadystatechange = function () {
             if (xhr.readyState === XMLHttpRequest.DONE) {
                 if (xhr.status === 200) {
-                    resultDiv.innerHTML = xhr.responseText; 
+                    console.log('Response received:', xhr.responseText); 
+                    resultDiv.innerHTML = xhr.responseText;
                 } else {
+                    console.error('Error:', xhr.status);
                     resultDiv.innerHTML = `<p>Error: Unable to fetch data. Status: ${xhr.status}</p>`;
                 }
             }
         };
 
-        const url = `world.php?country=${encodeURIComponent(countryValue)}`;
+        const url = `world.php?country=${encodeURIComponent(countryValue)}&lookup=country`;
+        console.log('Request URL:', url); 
         xhr.open('GET', url, true);
         xhr.send();
-    };
+    }
+
+    lookupCountryButton.addEventListener('click', performLookup);
 });
-
-
