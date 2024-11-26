@@ -1,9 +1,10 @@
 document.addEventListener('DOMContentLoaded', function () {
     const lookupCountryButton = document.querySelector('#lookupcountry');
+    const lookupCityButton = document.querySelector('#lookupcity');
     const countryInput = document.querySelector('#country');
     const resultDiv = document.querySelector('#result');
 
-    function performLookup() {
+    function performLookup(lookupType) {
         const countryValue = countryInput.value.trim();
         if (!countryValue) {
             resultDiv.innerHTML = '<p>Please enter a country name.</p>';
@@ -24,11 +25,13 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         };
 
-        const url = `world.php?country=${encodeURIComponent(countryValue)}&lookup=country`;
+        const url = `world.php?country=${encodeURIComponent(countryValue)}&lookup=${encodeURIComponent(lookupType)}`;
         console.log('Request URL:', url); 
         xhr.open('GET', url, true);
         xhr.send();
     }
 
-    lookupCountryButton.addEventListener('click', performLookup);
+
+    lookupCountryButton.addEventListener('click', () => performLookup('country'));
+    lookupCityButton.addEventListener('click', () => performLookup('cities'));
 });
